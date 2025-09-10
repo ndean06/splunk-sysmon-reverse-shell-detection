@@ -46,11 +46,20 @@ A reverse shell attack was simulated from Kali Linux against a Windows 10 VM. Sy
 
 ![msf6 multi handler](screenshots/2-home_lab.png)
 
-## 🔍 Detection in Splunk
+## 🔍 Detection in Splunk (Blue Team)
 
-### Query 1: Malicious Binary Execution
+### 1. Sus Network Connection
 ```spl
+index=endpoint EventCode=3 dest_ip=192.168.117.130 dest_port=4444 
+```
+![Binary Exe](screenshots/)
+
+2. Malicious Binary Execution (Root Cause Analysis)
+   
+3. Malicious Binary Execution
+
 index=endpoint Resume.pdf.exe
+
 
 
 ---
