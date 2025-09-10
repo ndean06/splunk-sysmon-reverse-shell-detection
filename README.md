@@ -17,7 +17,7 @@ A reverse shell attack was simulated from Kali Linux against a Windows 10 VM. Sy
 
 ## 🏗️ Lab Architecture
 
-![Alt text](screenshots/Screenshot_2025-09-10_053151.png)
+![Lab Setup](screenshots/Screenshot_2025-09-10_053151.png)
 
 ## ⚙️ Setup & Configuration
 
@@ -39,7 +39,12 @@ A reverse shell attack was simulated from Kali Linux against a Windows 10 VM. Sy
 4. Execution: Downloaded + executed payload on Windows 10
 5. Exploitation: Reverse shell established back to Kali (Meterpreter session)
 6. Post-Exploitation: Enumerated users, groups, and network info
-- 📸 (screenshots/2_home-lab.png)
+
+![msf6 multi handler](screenshots/1_home-lab.png)
+
+---
+
+![msf6 multi handler](screenshots/2-home_lab.png)
 
 ## 🔍 Detection in Splunk
 
