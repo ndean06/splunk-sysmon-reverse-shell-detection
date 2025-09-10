@@ -17,7 +17,7 @@ A reverse shell attack was simulated from Kali Linux against a Windows 10 VM. Sy
 
 ## 🏗️ Lab Architecture
 
-![Lab Setup](screenshots/vmware_lab.png)
+![Alt text](screenshots/Screenshot 2025-09-10 053151.png)
 
  Sysmon + Splunk Enterprise
 ## ⚙️ Setup & Configuration
