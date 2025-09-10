@@ -4,17 +4,21 @@
 This project demonstrates detecting malicious endpoint activity with **Sysmon** and **Splunk** in a VMware lab.  
 A reverse shell attack was simulated from Kali Linux against a Windows 10 VM. Sysmon telemetry was ingested into Splunk and analyzed to trace the attack.
 
+---
+
 ## 🎯 Objectives
-- Configure Sysmon on Windows 10 for endpoint telemetry
-- Ingest logs into Splunk Enterprise
-- Simulate a reverse shell attack from Kali Linux
-- Detect suspicious processes and network connections in Splunk
+- Configure **Sysmon** on Windows 10 for endpoint telemetry
+- Ingest logs into **Splunk Enterprise**
+- Simulate a **reverse shell attack** from Kali Linux with Metasploit
+- Detect suspicious network connections and child processes in Splunk
+- Investigate the attack timeline using Sysmon + Splunk correlation
+
+---
 
 ## 🏗️ Lab Architecture
-[ Kali Linux (Attacker) ]
-        │
-        ▼
-[ Windows 10 (Victim) ]
+
+![Lab Setup](screenshots/vmware_lab.png)
+
  Sysmon + Splunk Enterprise
 ## ⚙️ Setup & Configuration
 - Windows 10 VM → Installed Sysmon + Splunk Enterprise
