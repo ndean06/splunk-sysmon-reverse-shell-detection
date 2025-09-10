@@ -48,25 +48,35 @@ A reverse shell attack was simulated from Kali Linux against a Windows 10 VM. Sy
 
 ## 🔍 Detection in Splunk (Blue Team)
 
-### 1. Sus Network Connection
+### 1. Suspect Network Connection
 ```spl
 index=endpoint EventCode=3 dest_ip=192.168.117.130 dest_port=4444 
 ```
-![Binary Exe](screenshots/)
+![Reverse Shell NW Conn](screenshots/)
 
-2. Malicious Binary Execution (Root Cause Analysis)
-   
-3. Malicious Binary Execution
-
+### 2. Malicious Binary Execution (Root Cause Analysis)
+```spl
 index=endpoint Resume.pdf.exe
+```
+![Splunk Binary Detection](screenshots/splunk_resume_pdf.png)
 
+### 3. Suspicious Child Processes (Process Tree Investigation)
+```spl
+index=endpoint EventCode=1 ParentImage="*Resume.pdf.exe" Image="*cmd.exe"
+```
+![Suspicious Process Tree](screenshots/splunk_cmd_child.png)
 
+4. Timeline of Attack (Correlating Activity by GUID)
+```spl
+index=endpoint {8519ae3f-07b6-68c0-ea0a-000000001500}
+| table _time, ParentImage, Image, CommandLine
+```
+![Attack Timeline](screenshots/splunk_timeline.png)
 
 ---
 
 ### 8. **Findings & Results**
-Show what you uncovered.  
-```markdown
+ 
 ## 📑 Findings
 - Reverse shell established from victim → attacker on TCP/4444
 - `Resume.pdf.exe` spawned `cmd.exe` (suspicious child process)
