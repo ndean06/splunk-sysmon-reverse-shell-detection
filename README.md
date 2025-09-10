@@ -17,9 +17,8 @@ A reverse shell attack was simulated from Kali Linux against a Windows 10 VM. Sy
 
 ## 🏗️ Lab Architecture
 
-![Alt text](screenshots/Screenshot 2025-09-10 053151.png)
+![Alt text](screenshots/Screenshot_2025-09-10_053151.png)
 
- Sysmon + Splunk Enterprise
 ## ⚙️ Setup & Configuration
 - Windows 10 VM → Installed Sysmon + Splunk Enterprise
 - Configured `inputs.conf` to send Sysmon logs to `index=endpoint`
