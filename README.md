@@ -20,16 +20,25 @@ A reverse shell attack was simulated from Kali Linux against a Windows 10 VM. Sy
 ![Alt text](screenshots/Screenshot_2025-09-10_053151.png)
 
 ## ⚙️ Setup & Configuration
-- Windows 10 VM → Installed Sysmon + Splunk Enterprise
+
+### Windows 10 VM
+- Installed Sysmon with modular configuration
+- Installed Splunk Enterprise
 - Configured `inputs.conf` to send Sysmon logs to `index=endpoint`
-- Kali Linux VM → Recon, payload generation, reverse shell
-- Verified ingestion of Sysmon events in Splunk
+- Restarted splunkd service
+
+###Splunk
+-Created a new index: endpoint
+-Installed Splunk Add-on for Sysmon
+-Verified Sysmon logs ingestion
 
 ## 🚨 Attack Simulation
-- Generated malicious payload (`Resume.pdf.exe`) using Metasploit
-- Hosted payload on Kali via Python HTTP server
-- Executed payload on Windows 10 VM → reverse shell established
-- Post-exploitation: enumerated users, groups, and network details
+1. Recon: Scanned victim with Nmap from Kali
+2. Payload: Generated reverse TCP payload (Resume.pdf.exe) with Metasploit
+3. Delivery: Hosted payload on Kali with Python HTTP server (python3 -m http.server 9999)
+4. Execution: Downloaded + executed payload on Windows 10
+5. Exploitation: Reverse shell established back to Kali (Meterpreter session)
+6. Post-Exploitation: Enumerated users, groups, and network info
 - 📸 (Insert screenshot here)
 
 ## 🔍 Detection in Splunk
