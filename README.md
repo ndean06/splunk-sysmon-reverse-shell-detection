@@ -27,10 +27,10 @@ A reverse shell attack was simulated from Kali Linux against a Windows 10 VM. Sy
 - Configured `inputs.conf` to send Sysmon logs to `index=endpoint`
 - Restarted splunkd service
 
-###Splunk
--Created a new index: endpoint
--Installed Splunk Add-on for Sysmon
--Verified Sysmon logs ingestion
+### Splunk
+- Created a new index: endpoint
+- Installed Splunk Add-on for Sysmon
+- Verified Sysmon logs ingestion
 
 ## 🚨 Attack Simulation
 1. Recon: Scanned victim with Nmap from Kali
@@ -39,7 +39,7 @@ A reverse shell attack was simulated from Kali Linux against a Windows 10 VM. Sy
 4. Execution: Downloaded + executed payload on Windows 10
 5. Exploitation: Reverse shell established back to Kali (Meterpreter session)
 6. Post-Exploitation: Enumerated users, groups, and network info
-- 📸 (Insert screenshot here)
+- 📸 (screenshots/2_home-lab.png)
 
 ## 🔍 Detection in Splunk
 
