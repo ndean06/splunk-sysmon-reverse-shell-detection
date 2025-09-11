@@ -55,16 +55,22 @@ Started with a broad search for all Sysmon EventCode 3 (Network Connections):
 index=endpoint EventCode=3
 ```
 ![splunk Event Code 3](screenshots/2025-09-11-050526.png)
+
 This will return all outbound connections from the Windows 10 VM.
 
 ---
 
 ![splunk Event Code 3 Results](screenshots/2025-09-11-050745.png)
+
 Notice that there is a connection to a suspicious port TCP 4444
 
 ---
 
-![splunk Dest Port and Source IP](screenshots/2025-09-11-050745.png)
+![splunk Dest Port and Source IP](screenshots/2025-09-11-053336.png)
+
+After we spot the suspicious port we find the ip address where connection is coming from with `dest_ip`
+
+
 ### 1. Suspec Network Connection
 ```spl
 index=endpoint EventCode=3 dest_ip=192.168.117.130 dest_port=4444 
