@@ -66,15 +66,25 @@ Notice that there is a connection to a suspicious port TCP 4444
 
 ---
 
+### 2. Suspicious  Network Connection
+
+```spl
+index=endpoint EventCode=3 dest_ip=192.168.117.130 dest_port=4444 
+```
+
 ![splunk Dest Port and Source IP](screenshots/2025-09-11-053336.png)
 
 After we spot the suspicious port we find the ip address where connection is coming from with `dest_ip`
 
+---
 
-### 1. Suspec Network Connection
-```spl
-index=endpoint EventCode=3 dest_ip=192.168.117.130 dest_port=4444 
-```
+Once can pin point the odd traffic we then can refine our search using `EventCode` this time using EventCode 1.
+
+![splunk Dest Port and Source IP](screenshots/2025-09-11-053730.png)
+
+
+
+
 
 
 ### 2. Malicious Binary Execution (Root Cause Analysis)
