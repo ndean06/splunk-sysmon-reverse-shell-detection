@@ -83,11 +83,9 @@ Once can pin point the odd traffic we then can refine our search using `EventCod
 ![splunk Dest Port and Source IP](screenshots/2025-09-11-053730.png)
 
 
+### 3. Malicious Binary Execution (Root Cause Analysis)
 
-
-
-
-### 2. Malicious Binary Execution (Root Cause Analysis)
+Using Event Code 1 we spot a suspicious process 
 ```spl
 index=endpoint Resume.pdf.exe
 ```
