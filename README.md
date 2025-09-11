@@ -98,8 +98,8 @@ Using Event Code 1 we spot a suspicious process `Resume.pdf.exe`
 index=endpoint Resume.pdf.exe EventCode=1
 ```
 ![Suspicious Process Tree1](screenshots/2025-09-11-054719.png)
-Expand the data to gain more information
 
+Expand the data to gain more information
 ![Suspicious Process Tree](screenshots/splunk_cmd_child.png)
 
 4. Timeline of Attack (Correlating Activity by GUID)
