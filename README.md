@@ -2,7 +2,7 @@
 
 ## 📖 Overview
 This project demonstrates detecting malicious endpoint activity with **Sysmon** and **Splunk** in a VMware lab.  
-A reverse shell attack was simulated from Kali Linux against a Windows 10 VM. Sysmon telemetry was ingested into Splunk and analyzed to trace the attack.
+A **reverse shell attack** was simulated from Kali Linux against a Windows 10 VM. Sysmon telemetry was ingested into Splunk and analyzed to trace the attack.
 
 ---
 
@@ -19,32 +19,36 @@ A reverse shell attack was simulated from Kali Linux against a Windows 10 VM. Sy
 
 ![Lab Setup](screenshots/Screenshot_2025-09-10_053151.png)
 
+---
+
 ## ⚙️ Setup & Configuration
 
 ### Windows 10 VM
-- Installed Sysmon with modular configuration
-- Installed Splunk Enterprise
+- Installed **Sysmon** with modular configuration
+- Installed **Splunk Enterprise**
 - Configured `inputs.conf` to send Sysmon logs to `index=endpoint`
-- Restarted splunkd service
+- Restarted **Splunkd service**
 
 ### Splunk
 - Created a new index: endpoint
 - Installed Splunk Add-on for Sysmon
 - Verified Sysmon logs ingestion
 
-## 🚨 Attack Simulation
-1. Recon: Scanned victim with Nmap from Kali
-2. Payload: Generated reverse TCP payload (Resume.pdf.exe) with Metasploit
-3. Delivery: Hosted payload on Kali with Python HTTP server (python3 -m http.server 9999)
-4. Execution: Downloaded + executed payload on Windows 10
-5. Exploitation: Reverse shell established back to Kali (Meterpreter session)
-6. Post-Exploitation: Enumerated users, groups, and network info
+---
+
+## 🚨 Attack Simulation (Red Team)
+1. **Recon**: Scanned victim with Nmap from Kali
+2. **Payload**: Generated reverse TCP payload (Resume.pdf.exe) with Metasploit
+3. **Delivery**: Hosted payload on Kali with Python HTTP server (python3 -m http.server 9999)
+4. **Execution**: Downloaded + executed payload on Windows 10
+5. **Exploitation**: Reverse shell established back to Kali (Meterpreter session)
+6. **Post-Exploitation**: Enumerated users, groups, and network info
 
 ![msf6 multi handler](screenshots/1_home-lab.png)
 
----
-
 ![msf6 multi handler](screenshots/2-home_lab.png)
+
+---
 
 ## 🔍 Detection in Splunk (Blue Team)
 ![splunk index=endpoint](screenshots/2025-09-11-050056.png)
@@ -62,11 +66,12 @@ This will return all outbound connections from the Windows 10 VM.
 
 ![splunk Event Code 3 Results](screenshots/2025-09-11-050745.png)
 
-Notice that there is a connection to a suspicious port TCP 4444
+From this search, an outbound connection was discovered to a suspicious port: TCP 4444.
 
 ---
 
-### 2. Suspicious  Network Connection
+### 2. Suspicious Network Connection (Discovery)
+Refined the search to identify traffic to the attacker’s IP and port:
 
 ```spl
 index=endpoint EventCode=3 dest_ip=192.168.117.130 dest_port=4444 
@@ -86,14 +91,14 @@ Once can pin point the odd traffic we then can refine our search using `EventCod
 
 ### 3. Malicious Binary Execution (Root Cause Analysis)
 
-Using Event Code 1 we spot a suspicious process `Resume.pdf.exe` 
+Pivoted to Event Code 1 (Process Creation) we spot a suspicious process `Resume.pdf.exe` 
 
 ![splunk process exec Resume.pdf.exe](screenshots/2025-09-11-051136.png)
 
 ---
 
-### 3. Suspicious Child Processes (Process Tree Investigation)
-
+### 4. Suspicious Child Processes (Process Tree Investigation)
+Investigated the process tree to confirm parent/child relationships:
 ```spl
 index=endpoint Resume.pdf.exe EventCode=1
 ```
@@ -103,11 +108,12 @@ Expand the data to gain more information
 
 ![Suspicious Process Tree2](screenshots/2025-09-11-055024.png)
 
-Parent Child Process of Resume.pdf.exe and cmd.exe
+Confirmed Resume.pdf.exe spawned cmd.exe, which later invoked PowerShell for payload execution.
 
 ---
 
-### 4. Timeline of Attack (Correlating Activity by GUID)
+### 5. Timeline of Attack (Correlating Activity by GUID)
+Reconstructed the full attack chain using process GUID:
 ```spl
 index=endpoint {8519ae3f-07b6-68c0-ea0a-000000001500}
 | table _time,ParentImage,Image,CommandLine
@@ -115,24 +121,30 @@ index=endpoint {8519ae3f-07b6-68c0-ea0a-000000001500}
 ![Attack Timeline](screenshots/2025-09-11-055451.png)
 
 ---
-
-### 8. **Findings & Results**
  
 ## 📑 Findings
 - Reverse shell established from victim → attacker on TCP/4444
-- `Resume.pdf.exe` spawned `cmd.exe` (suspicious child process)
-- Correlated Sysmon Event IDs 1 (process creation) + 3 (network connection)
-- Attack chain mapped: Resume.pdf.exe → cmd.exe → powershell.exe → reverse shell
+- Malicious binary `Resume.pdf.exe` was executed from the Downloads folder
+- Sysmon Event ID 1 (Process Creation) confirmed it spawned `cmd.exe` and `powershell.exe`
+- Sysmon Event ID 3 (Network Connection) confirmed outbound traffic to attacker IP
+- Attack chain: `Resume.pdf.exe → cmd.exe → powershell.exe → reverse shell`
 
 ## ✅ Conclusion
-This lab demonstrates how endpoint telemetry and SIEM analysis can be used to detect and investigate adversary activity.  
-It highlights essential SOC analyst skills:
-- Endpoint monitoring (Sysmon)  
-- Log analysis & correlation (Splunk)  
-- Threat emulation (Metasploit)  
-- Incident investigation workflows  
+This lab demonstrates a full SOC workflow:
+1️⃣ Detecting anomalous network activity (reverse shell on TCP 4444)
+2️⃣ Pivoting into endpoint process telemetry to identify the root cause
+3️⃣ Mapping the attack chain through parent/child process correlation
+4️⃣ Reconstructing the timeline of adversary behavior
+
+📈 Skills Demonstrated:
+
+- Endpoint monitoring with Sysmon
+- SIEM analysis with Splunk SPL queries
+- Threat emulation with Metasploit
+- Incident investigation & reporting
 
 ## 📂 Repository Structure
+```perl
 splunk-sysmon-reverse-shell-detection/
 │── README.md             # Project landing page
 │── lab_setup.md          # Setup instructions
@@ -140,7 +152,7 @@ splunk-sysmon-reverse-shell-detection/
 │── detection_queries.md  # Splunk SPL queries
 │── screenshots/          # Evidence
 │── report.pdf            # Professional write-up
-
+```
 ## 🔗 References
 - [Sysmon (Sysinternals)](https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon)
 - [Splunk Enterprise](https://www.splunk.com/en_us/download/splunk-enterprise.html)
