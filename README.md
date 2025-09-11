@@ -47,6 +47,7 @@ A reverse shell attack was simulated from Kali Linux against a Windows 10 VM. Sy
 ![msf6 multi handler](screenshots/2-home_lab.png)
 
 ## 🔍 Detection in Splunk (Blue Team)
+![splunk index=endpoint](Screenshot 2025-09-11 050056.png)
 
 ### 1. Broad Search - Reviewing Network Connections
 Started with a broad search for all Sysmon EventCode 3 (Network Connections):
