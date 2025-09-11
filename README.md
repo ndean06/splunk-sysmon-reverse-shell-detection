@@ -54,12 +54,14 @@ Started with a broad search for all Sysmon EventCode 3 (Network Connections):
 ```spl
 index=endpoint EventCode=3
 ```
-
+![splunk index=endpoint](screenshots/2025-09-11-050056.png)
 ### 1. Suspec Network Connection
 ```spl
 index=endpoint EventCode=3 dest_ip=192.168.117.130 dest_port=4444 
 ```
-![Reverse Shell NW Conn](screenshots/)
+![splunk Event Code 3](screenshots/2025-09-11-050526.png)
+
+![splunk Event Code 3 Results](screenshots/2025-09-11-050745.png)
 
 ### 2. Malicious Binary Execution (Root Cause Analysis)
 ```spl
