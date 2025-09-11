@@ -82,19 +82,24 @@ Once can pin point the odd traffic we then can refine our search using `EventCod
 
 ![splunk Dest Port and Source IP](screenshots/2025-09-11-053730.png)
 
+---
 
 ### 3. Malicious Binary Execution (Root Cause Analysis)
 
-Using Event Code 1 we spot a suspicious process 
-```spl
-index=endpoint Resume.pdf.exe
-```
-![Splunk Binary Detection](screenshots/splunk_resume_pdf.png)
+Using Event Code 1 we spot a suspicious process `Resume.pdf.exe` 
+
+![splunk process exec Resume.pdf.exe](screenshots/2025-09-11-051136.png)
+
+---
 
 ### 3. Suspicious Child Processes (Process Tree Investigation)
+
 ```spl
-index=endpoint EventCode=1 ParentImage="*Resume.pdf.exe" Image="*cmd.exe"
+index=endpoint Resume.pdf.exe EventCode=1
 ```
+![Suspicious Process Tree1](screenshots/2025-09-11-054719.png)
+Expand the data to gain more information
+
 ![Suspicious Process Tree](screenshots/splunk_cmd_child.png)
 
 4. Timeline of Attack (Correlating Activity by GUID)
