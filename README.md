@@ -107,12 +107,12 @@ Parent Child Process of Resume.pdf.exe and cmd.exe
 
 ---
 
-4. Timeline of Attack (Correlating Activity by GUID)
+### 4. Timeline of Attack (Correlating Activity by GUID)
 ```spl
 index=endpoint {8519ae3f-07b6-68c0-ea0a-000000001500}
-| table _time, ParentImage, Image, CommandLine
+| table _time,ParentImage,Image,CommandLine
 ```
-![Attack Timeline](screenshots/splunk_timeline.png)
+![Attack Timeline](screenshots/2025-09-11-055451.png)
 
 ---
 
