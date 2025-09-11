@@ -103,6 +103,10 @@ Expand the data to gain more information
 
 ![Suspicious Process Tree2](screenshots/2025-09-11-055024.png)
 
+Parent Child Process of Resume.pdf.exe and cmd.exe
+
+---
+
 4. Timeline of Attack (Correlating Activity by GUID)
 ```spl
 index=endpoint {8519ae3f-07b6-68c0-ea0a-000000001500}
