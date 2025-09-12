@@ -86,7 +86,7 @@ index=endpoint EventCode=3
 
 ![splunk Event Code 3 Results](screenshots/2025-09-11-050745.png)
 
-From this search, an outbound connection was discovered to a suspicious port: TCP 4444.
+*Ref 6: Screenshot of Splunk field analysis for dest_port. Most traffic used expected system ports (5353, 5355, 443), but a rare connection on port 4444 was identified — the reverse shell session created by the malicious payload.*
 
 ---
 
@@ -99,13 +99,15 @@ index=endpoint EventCode=3 dest_ip=192.168.117.130 dest_port=4444
 
 ![splunk Dest Port and Source IP](screenshots/2025-09-11-053336.png)
 
-After we spot the suspicious port we find the ip address where connection is coming from with `dest_ip`
+*Ref 7: Screenshot showing Splunk query results confirming outbound traffic from the victim to the attacker’s IP (192.168.117.130) on TCP port 4444. This connection corresponds to the reverse shell established by the malicious payload.*
 
 ---
 
 Once can pin point the odd traffic we then can refine our search using `EventCode` this time using EventCode 1.
 
 ![splunk Dest Port and Source IP](screenshots/2025-09-11-053730.png)
+
+*Ref 8: Screenshot showing Splunk field analysis of Sysmon EventCodes. By pivoting from EventCode 3 (network connections) to EventCode 1 (process creation), analysts can identify the binary (Resume.pdf.exe) responsible for initiating the reverse shell.*
 
 ---
 
@@ -114,6 +116,8 @@ Once can pin point the odd traffic we then can refine our search using `EventCod
 Pivoted to Event Code 1 (Process Creation) we spot a suspicious process `Resume.pdf.exe` 
 
 ![splunk process exec Resume.pdf.exe](screenshots/2025-09-11-051136.png)
+
+*Ref 9: Screenshot showing Splunk query results for Sysmon EventCode 1. The malicious process Resume.pdf.exe was identified as the binary responsible for initiating the reverse shell connection.*
 
 ---
 
@@ -124,7 +128,7 @@ index=endpoint Resume.pdf.exe EventCode=1
 ```
 ![Suspicious Process Tree1](screenshots/2025-09-11-054719.png)
 
-Expand the data to gain more information
+*Ref 10: Screenshot showing Splunk process tree analysis. The malicious binary Resume.pdf.exe spawned cmd.exe, confirming suspicious child process activity leading to the reverse shell (Expand the data to gain more information).*
 
 ![Suspicious Process Tree2](screenshots/2025-09-11-055024.png)
 
