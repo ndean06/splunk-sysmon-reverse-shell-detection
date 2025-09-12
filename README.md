@@ -1,19 +1,34 @@
 # 🛡️ Endpoint Detection Lab with Splunk & Sysmon
 
-## 📖 Overview
-This project demonstrates detecting malicious endpoint activity with **Sysmon** and **Splunk** in a VMware lab.  
-A **reverse shell attack** was simulated from Kali Linux against a Windows 10 VM. Sysmon telemetry was ingested into Splunk and analyzed to trace the attack.
+## Objective
+The Endpoint Detection Lab project was designed to create a controlled environment for simulating and detecting malicious activity on a **Windows 10** endpoint. The primary focus was to collect telemetry with **Sysmon**, ingest and analyze logs within **Splunk Enterprise**, and generate test data through adversary emulation using **Metasploit**. This hands-on exercise provided practical experience in identifying reverse shell activity, investigating suspicious processes, and correlating events to reconstruct an attack timeline, strengthening core SOC analyst detection and investigation skills.
 
----
-
-## 🎯 Objectives
 - Configure **Sysmon** on Windows 10 for endpoint telemetry
 - Ingest logs into **Splunk Enterprise**
 - Simulate a **reverse shell attack** from Kali Linux with Metasploit
 - Detect suspicious network connections and child processes in Splunk
 - Investigate the attack timeline using Sysmon + Splunk correlation
 
----
+### Skills Learned
+
+- Practical experience configuring Sysmon to generate endpoint telemetry.
+- Proficiency in Splunk SPL for detecting suspicious processes, binaries, and network activity.
+- Ability to correlate Sysmon events to trace attack paths and reconstruct timelines.
+- Hands-on exposure to reverse shell detection through anomalous network traffic (TCP 4444).
+- Improved understanding of parent-child process relationships in malware investigations.
+- Experience with Metasploit (msfvenom + multi/handler) for adversary emulation.
+- Application of incident investigation workflows (discovery → analysis → findings → reporting).
+- Strengthened SOC analyst skills including log analysis, threat detection, and root cause analysis.
+
+### Tools Used
+
+- Splunk Enterprise – SIEM platform for log ingestion, correlation, and detection queries.
+- Sysmon (Sysinternals) – Endpoint telemetry tool for capturing process and network events.
+- Metasploit Framework (msfvenom & multi/handler) – Payload generation and reverse shell exploitation.
+- Python HTTP Server – Used to host and deliver the malicious payload.
+- VMware Workstation – Virtualization platform for isolated attacker and victim environments.
+- Windows 10 – Endpoint target for Sysmon telemetry and reverse shell execution.
+- Kali Linux – Attacker system for reconnaissance, payload hosting, and exploitation.
 
 ## 🏗️ Lab Architecture
 
