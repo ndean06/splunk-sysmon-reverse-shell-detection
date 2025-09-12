@@ -34,7 +34,7 @@ The Endpoint Detection Lab project was designed to create a controlled environme
 
 ![Lab Setup](screenshots/Screenshot_2025-09-10_053151.png)
 
----
+*Ref 1: Network Diagram*
 
 ## ⚙️ Setup & Configuration
 
@@ -49,7 +49,7 @@ The Endpoint Detection Lab project was designed to create a controlled environme
 - Installed Splunk Add-on for Sysmon
 - Verified Sysmon logs ingestion
 
----
+-
 
 ## 🚨 Attack Simulation (Red Team)
 1. **Recon**: Scanned victim with Nmap from Kali
@@ -61,7 +61,11 @@ The Endpoint Detection Lab project was designed to create a controlled environme
 
 ![msf6 multi handler](screenshots/1_home-lab.png)
 
+*Ref 2: Screenshot showing the configuration of Metasploit’s multi/handler module. The reverse TCP payload was set with LHOST (192.168.109.129) and LPORT (4444) to receive a reverse shell from the victim.*
+
 ![msf6 multi handler](screenshots/2-home_lab.png)
+
+*Ref 3: Screenshot showing the Metasploit multi/handler receiving a connection from the Windows 10 victim. The successful Meterpreter session confirms the reverse shell was established on TCP port 4444.*
 
 ---
 
