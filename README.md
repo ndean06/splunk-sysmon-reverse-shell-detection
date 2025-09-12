@@ -49,8 +49,6 @@ The Endpoint Detection Lab project was designed to create a controlled environme
 - Installed Splunk Add-on for Sysmon
 - Verified Sysmon logs ingestion
 
--
-
 ## 🚨 Attack Simulation (Red Team)
 1. **Recon**: Scanned victim with Nmap from Kali
 2. **Payload**: Generated reverse TCP payload (Resume.pdf.exe) with Metasploit
@@ -70,7 +68,10 @@ The Endpoint Detection Lab project was designed to create a controlled environme
 ---
 
 ## 🔍 Detection in Splunk (Blue Team)
+
 ![splunk index=endpoint](screenshots/2025-09-11-050056.png)
+
+*Ref 4: Screenshot showing the initial Splunk query (index=endpoint) confirming that Sysmon logs were successfully ingested, with 422 events available for investigation.*
 
 ### 1. Broad Search - Reviewing Network Connections
 Started with a broad search for all Sysmon EventCode 3 (Network Connections):
@@ -79,7 +80,7 @@ index=endpoint EventCode=3
 ```
 ![splunk Event Code 3](screenshots/2025-09-11-050526.png)
 
-This will return all outbound connections from the Windows 10 VM.
+*Ref 5: Screenshot showing a Splunk query for Sysmon EventCode 3 (Network Connections). This broad search returned 125 events and served as the foundation for identifying the reverse shell connection on TCP port 4444.*
 
 ---
 
