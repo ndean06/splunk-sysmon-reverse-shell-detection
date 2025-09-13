@@ -216,18 +216,8 @@ Overall, this project highlights essential SOC analyst skills, including log ing
 - Threat emulation with Metasploit
 - Incident investigation & reporting
 
-## 📂 Repository Structure
-
-```perl
-splunk-sysmon-reverse-shell-detection/
-│── README.md             # Project landing page
-│── lab_setup.md          # Setup instructions
-│── attack_simulation.md  # Adversary steps
-│── detection_queries.md  # Splunk SPL queries
-│── screenshots/          # Evidence
-│── report.pdf            # Professional write-up
-```
 ## 🔗 References
+
 - [Sysmon (Sysinternals)](https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon)
 - [Splunk Enterprise](https://www.splunk.com/en_us/download/splunk-enterprise.html)
 - [Metasploit Framework](https://www.metasploit.com/)
