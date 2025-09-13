@@ -206,6 +206,7 @@ Detection: Suspicious network connection (TCP 4444) was identified and tied to a
 - Investigation: Process creation events linked the activity to a malicious binary (`Resume.pdf.exe`).
 - Correlation: Parent-child process analysis and GUID correlation reconstructed the full attack chain.
 - Analysis Outcome: Confirmed reverse shell establishment and attacker reconnaissance activity.
+
 Overall, this project highlights essential SOC analyst skills, including log ingestion, anomaly detection, process correlation, and attack timeline reconstruction.
 
 ## 📈 Skills Demonstrated:
