@@ -177,20 +177,38 @@ index=endpoint {8519ae3f-07b6-68c0-ea0a-000000001500}
  
 ## 📑 Findings
 
-- Reverse shell established from victim → attacker on TCP/4444
-- Malicious binary `Resume.pdf.exe` was executed from the Downloads folder
-- Sysmon Event ID 1 (Process Creation) confirmed it spawned `cmd.exe` and `powershell.exe`
-- Sysmon Event ID 3 (Network Connection) confirmed outbound traffic to attacker IP
-- Attack chain: `Resume.pdf.exe → cmd.exe → powershell.exe → reverse shell`
+**Malicious Network Activity:**
+- Single outbound connection detected on TCP port 4444, linked to attacker IP `192.168.117.130`.
+- Confirmed reverse shell communication channel.
+
+**Malicious Binary Execution:**
+- Identified suspicious process Resume.pdf.exe executed from the Downloads folder.
+- Matched to the Metasploit payload used in the attack simulation.
+
+**Process Correlation:**
+- `Resume.pdf.exe` spawned `cmd.exe`, which later executed additional commands.
+- Parent-child process relationship confirmed via Sysmon logs with process IDs and GUIDs.
+
+**Attacker Activity:**
+- Reconnaissance commands observed within the reverse shell session:
+  - ipconfig → Network discovery.
+  - whoami → User identification.
+  - net localgroup, net user → Account and group enumeration.
+- Activity confirmed that the attacker established access and explored the system.
+
+Attack chain: `Resume.pdf.exe → cmd.exe → powershell.exe → reverse shell`
 
 ## ✅ Conclusion
-This lab demonstrates a full SOC workflow:
-1️⃣ Detecting anomalous network activity (reverse shell on TCP 4444)
-2️⃣ Pivoting into endpoint process telemetry to identify the root cause
-3️⃣ Mapping the attack chain through parent/child process correlation
-4️⃣ Reconstructing the timeline of adversary behavior
 
-📈 Skills Demonstrated:
+This lab successfully demonstrated how endpoint telemetry (Sysmon) and SIEM analysis (Splunk) can be used to detect and investigate adversary activity.
+
+Detection: Suspicious network connection (TCP 4444) was identified and tied to attacker IP.
+- Investigation: Process creation events linked the activity to a malicious binary (`Resume.pdf.exe`).
+- Correlation: Parent-child process analysis and GUID correlation reconstructed the full attack chain.
+- Analysis Outcome: Confirmed reverse shell establishment and attacker reconnaissance activity.
+Overall, this project highlights essential SOC analyst skills, including log ingestion, anomaly detection, process correlation, and attack timeline reconstruction.
+
+## 📈 Skills Demonstrated:
 
 - Endpoint monitoring with Sysmon
 - SIEM analysis with Splunk SPL queries
@@ -198,6 +216,7 @@ This lab demonstrates a full SOC workflow:
 - Incident investigation & reporting
 
 ## 📂 Repository Structure
+
 ```perl
 splunk-sysmon-reverse-shell-detection/
 │── README.md             # Project landing page
