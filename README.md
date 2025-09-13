@@ -69,20 +69,33 @@ The Endpoint Detection Lab project was designed to create a controlled environme
 
 ## 🔍 Detection in Splunk (Blue Team)
 
+### 1. Initial Baseline Search
+
+To begin detection, I confirmed that Sysmon telemetry was ingested into Splunk by running a broad `index=endpoint search`. This baseline query verified that log collection was working, with 422 events available for further investigation.
+
 ![splunk index=endpoint](screenshots/2025-09-11-050056.png)
 
 *Ref 4: Screenshot showing the initial Splunk query (index=endpoint) confirming that Sysmon logs were successfully ingested, with 422 events available for investigation.*
 
-### 1. Broad Search - Reviewing Network Connections
-Started with a broad search for all Sysmon EventCode 3 (Network Connections):
+---
+
+### 2. Broad Network Search (EventCode=3) 
+
+With ingestion confirmed, I pivoted to network activity. Sysmon EventCode 3 logs process-initiated connections, and a search revealed 125 events from the endpoint during the observed period.
+
 ```spl
 index=endpoint EventCode=3
 ```
+
 ![splunk Event Code 3](screenshots/2025-09-11-050526.png)
 
 *Ref 5: Screenshot showing a Splunk query for Sysmon EventCode 3 (Network Connections). This broad search returned 125 events and served as the foundation for identifying the reverse shell connection on TCP port 4444.*
 
 ---
+
+### 3. Rare Port Discovery
+
+After identifying overall network connections, I analyze the dest_port field. Most activity involved expected system ports (5353, 5355, 443), but a single connection appeared on TCP port 4444. This stood out as anomalous since it is commonly used for reverse shells, confirming suspicious outbound activity from the endpoint.
 
 ![splunk Event Code 3 Results](screenshots/2025-09-11-050745.png)
 
@@ -90,8 +103,9 @@ index=endpoint EventCode=3
 
 ---
 
-### 2. Suspicious Network Connection (Discovery)
-Refined the search to identify traffic to the attacker’s IP and port:
+### 4. Suspicious Network Connection (Discovery)
+
+After spotting the anomalous port, I refined the search further to filter on both the attacker’s IP address (192.168.117.130) and destination port 4444. This revealed a single outbound connection from the victim, confirming the communication channel used by the malicious payload to establish the reverse shell.
 
 ```spl
 index=endpoint EventCode=3 dest_ip=192.168.117.130 dest_port=4444 
@@ -103,7 +117,9 @@ index=endpoint EventCode=3 dest_ip=192.168.117.130 dest_port=4444
 
 ---
 
-Once can pin point the odd traffic we then can refine our search using `EventCode` this time using EventCode 1.
+### 5. Pivot to Process Creation (EventCode=1)
+
+After spotting the network connection, I pivoted to Sysmon `EventCode 1` (process creation) to find which process initiated the traffic.
 
 ![splunk Dest Port and Source IP](screenshots/2025-09-11-053730.png)
 
@@ -111,9 +127,9 @@ Once can pin point the odd traffic we then can refine our search using `EventCod
 
 ---
 
-### 3. Malicious Binary Execution (Root Cause Analysis)
+### 6. Malicious Binary Execution (Resume.pdf.exe)
 
-Pivoted to Event Code 1 (Process Creation) we spot a suspicious process `Resume.pdf.exe` 
+The process analysis reveald that a suspicious binary named `Resume.pdf.exe` had executed from the Downloads folder. This executable matched the Metasploit payload previously delivered to the system. Its execution serves as the root cause of the anomalous network activity and marks the initial compromise stage of the attack. 
 
 ![splunk process exec Resume.pdf.exe](screenshots/2025-09-11-051136.png)
 
@@ -121,32 +137,46 @@ Pivoted to Event Code 1 (Process Creation) we spot a suspicious process `Resume.
 
 ---
 
-### 4. Suspicious Child Processes (Process Tree Investigation)
-Investigated the process tree to confirm parent/child relationships:
+### 7. Suspicious Child Processes (Process Tree Investigation)
+
+To understand the full behavior of the binary, I investigated its child processes. The Sysmon logs showed that Resume.pdf.exe spawned cmd.exe, a clear indicator of suspicious activity since PDFs do not normally generate command shells. This parent-child relationship provides critical context in confirming malicious behavior.
+
 ```spl
 index=endpoint Resume.pdf.exe EventCode=1
 ```
+
 ![Suspicious Process Tree1](screenshots/2025-09-11-054719.png)
 
 *Ref 10: Screenshot showing Splunk process tree analysis. The malicious binary Resume.pdf.exe spawned cmd.exe, confirming suspicious child process activity leading to the reverse shell (Expand the data to gain more information).*
 
+---
+
+### 8. Parent/Child Process Correlation (Detailed View)
+
+To validate the attack chain, I examined parent/child process relationships. Sysmon logs showed that the malicious binary `Resume.pdf.exe` launched `cmd.exe`. This correlation confirms how the attacker gained execution, as malicious binaries typically spawn command shells to run follow-on commands or invoke additional payloads.
+
 ![Suspicious Process Tree2](screenshots/2025-09-11-055024.png)
 
-Confirmed Resume.pdf.exe spawned cmd.exe, which later invoked PowerShell for payload execution.
+*Ref 11: Screenshot below shows Sysmon event fields linking Resume.pdf.exe (parent) to cmd.exe (child), with process IDs, GUIDs, and hashes captured as indicators of compromise (IOCs).*
 
 ---
 
-### 5. Timeline of Attack (Correlating Activity by GUID)
-Reconstructed the full attack chain using process GUID:
+### 9. Timeline of Attack (Correlating Activity by GUID)
+
+Building on the parent/child process correlation from the previous step, I pivoted on the Process GUID linked to Resume.pdf.exe. Using this identifier, I reconstructed the attack timeline in Splunk. The results showed `Resume.pdf.exe` spawning `cmd.exe`, which then executed reconnaissance commands (`ipconfig`, `whoami`, `net localgroup`, `net user`). This confirmed that the reverse shell was not only established but also actively used for system exploration.
+
 ```spl
 index=endpoint {8519ae3f-07b6-68c0-ea0a-000000001500}
 | table _time,ParentImage,Image,CommandLine
 ```
 ![Attack Timeline](screenshots/2025-09-11-055451.png)
 
+*Ref 12: Screenshot showing the attack timeline in Splunk. Process GUID correlation links Resume.pdf.exe to cmd.exe, followed by attacker reconnaissance commands.*
+
 ---
  
 ## 📑 Findings
+
 - Reverse shell established from victim → attacker on TCP/4444
 - Malicious binary `Resume.pdf.exe` was executed from the Downloads folder
 - Sysmon Event ID 1 (Process Creation) confirmed it spawned `cmd.exe` and `powershell.exe`
