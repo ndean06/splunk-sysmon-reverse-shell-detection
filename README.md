@@ -1,4 +1,14 @@
-# 🛡️ Endpoint Detection Lab with Splunk & Sysmon
+# Endpoint Detection Lab with Splunk & Sysmon
+
+## Project Summary
+
+**Scenario:** Investigated a simulated reverse shell attack on a Windows 10 endpoint using Splunk and Sysmon.
+
+**What I did:** Analyzed network and process telemetry, identified anomalous TCP 4444 traffic, and correlated Sysmon events to reconstruct the attack path.
+
+**Key findings:** Traced the activity to `Resume.pdf.exe`, confirmed it spawned `cmd.exe`, and identified attacker reconnaissance including `whoami`, `ipconfig`, and account enumeration.
+
+**Outcome:** Confirmed the reverse shell and reconstructed the attack timeline from malicious binary execution through post-exploitation activity.
 
 ## Objective
 The Endpoint Detection Lab project was designed to create a controlled environment for simulating and detecting malicious activity on a **Windows 10** endpoint. The primary focus was to collect telemetry with **Sysmon**, ingest and analyze logs within **Splunk Enterprise**, and generate test data through adversary emulation using **Metasploit**. This hands-on exercise provided practical experience in identifying reverse shell activity, investigating suspicious processes, and correlating events to reconstruct an attack timeline, strengthening core SOC analyst detection and investigation skills.
@@ -30,7 +40,7 @@ The Endpoint Detection Lab project was designed to create a controlled environme
 - Windows 10 – Endpoint target for Sysmon telemetry and reverse shell execution.
 - Kali Linux – Attacker system for reconnaissance, payload hosting, and exploitation.
 
-## 🏗️ Lab Architecture
+## Lab Architecture
 
 ![Lab Setup](screenshots/Screenshot_2025-09-10_053151.png)
 
@@ -49,7 +59,7 @@ The Endpoint Detection Lab project was designed to create a controlled environme
 - Installed Splunk Add-on for Sysmon
 - Verified Sysmon logs ingestion
 
-## 🚨 Attack Simulation (Red Team)
+## Attack Simulation (Red Team)
 1. **Recon**: Scanned victim with Nmap from Kali
 2. **Payload**: Generated reverse TCP payload (Resume.pdf.exe) with Metasploit
 3. **Delivery**: Hosted payload on Kali with Python HTTP server (python3 -m http.server 9999)
@@ -67,7 +77,7 @@ The Endpoint Detection Lab project was designed to create a controlled environme
 
 ---
 
-## 🔍 Detection in Splunk (Blue Team)
+## Detection in Splunk (Blue Team)
 
 ### 1. Initial Baseline Search
 
