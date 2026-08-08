@@ -2,13 +2,13 @@
 
 ## Project Summary
 
-**Scenario:** Investigated a simulated reverse shell attack on a Windows 10 endpoint using Splunk and Sysmon.
+**Scenario:** A Windows 10 endpoint established a suspicious outbound connection on TCP port 4444 after executing a malicious file disguised as a PDF.
 
-**What I did:** Analyzed network and process telemetry, identified anomalous TCP 4444 traffic, and correlated Sysmon events to reconstruct the attack path.
+**What I did:** Analyzed Splunk and Sysmon telemetry, investigated network and process activity, and correlated events to reconstruct the attack path.
 
 **Key findings:** Traced the activity to `Resume.pdf.exe`, confirmed it spawned `cmd.exe`, and identified attacker reconnaissance including `whoami`, `ipconfig`, and account enumeration.
 
-**Outcome:** Confirmed the reverse shell and reconstructed the attack timeline from malicious binary execution through post-exploitation activity.
+**Outcome:** Confirmed a reverse shell connection and reconstructed the attack timeline from initial execution through post-exploitation activity.
 
 ## Objective
 The Endpoint Detection Lab project was designed to create a controlled environment for simulating and detecting malicious activity on a **Windows 10** endpoint. The primary focus was to collect telemetry with **Sysmon**, ingest and analyze logs within **Splunk Enterprise**, and generate test data through adversary emulation using **Metasploit**. This hands-on exercise provided practical experience in identifying reverse shell activity, investigating suspicious processes, and correlating events to reconstruct an attack timeline, strengthening core SOC analyst detection and investigation skills.
