@@ -14,8 +14,49 @@ Traced the activity to `Resume.pdf.exe`, confirmed it spawned `cmd.exe`, and ide
 #### **Outcome:** 
 Confirmed a reverse shell connection and reconstructed the attack timeline from initial execution through post-exploitation activity.
 
+## Key Findings
+
+- Detected a rare outbound connection to `192.168.117.130` over TCP port `4444`.
+- Identified `Resume.pdf.exe` executing from the Windows Downloads directory.
+- Confirmed `Resume.pdf.exe` spawned `cmd.exe`.
+- Observed reconnaissance commands including `whoami`, `ipconfig`, `net user`, and `net localgroup`.
+- Correlated Sysmon Process GUIDs to reconstruct the attacker activity.
+- Confirmed successful reverse shell communication and post-exploitation activity.
+
+**Attack Chain:**  
+`Resume.pdf.exe → cmd.exe → powershell.exe → reverse shell`
+
+---
+
+## Tools Used
+
+- Splunk Enterprise
+- Sysmon
+- Metasploit Framework
+- Kali Linux
+- Windows 10
+- Python HTTP Server
+- VMware Workstation
+
+---
+
+## Skills Demonstrated
+
+- SIEM investigation
+- Endpoint telemetry analysis
+- SPL querying
+- Process correlation
+- Network anomaly detection
+- Attack timeline reconstruction
+- Incident investigation and reporting
+
+---
+
 ## Objective
-The Endpoint Detection Lab project was designed to create a controlled environment for simulating and detecting malicious activity on a **Windows 10** endpoint. The primary focus was to collect telemetry with **Sysmon**, ingest and analyze logs within **Splunk Enterprise**, and generate test data through adversary emulation using **Metasploit**. This hands-on exercise provided practical experience in identifying reverse shell activity, investigating suspicious processes, and correlating events to reconstruct an attack timeline, strengthening core SOC analyst detection and investigation skills.
+
+The Endpoint Detection Lab was designed to simulate and detect malicious activity on a Windows 10 endpoint using Sysmon telemetry and Splunk Enterprise. The lab focused on reverse shell detection, suspicious process activity, network analysis, and attack timeline reconstruction.
+
+
 
 - Configure **Sysmon** on Windows 10 for endpoint telemetry
 - Ingest logs into **Splunk Enterprise**
@@ -23,34 +64,13 @@ The Endpoint Detection Lab project was designed to create a controlled environme
 - Detect suspicious network connections and child processes in Splunk
 - Investigate the attack timeline using Sysmon + Splunk correlation
 
-### Skills Learned
-
-- Practical experience configuring Sysmon to generate endpoint telemetry.
-- Proficiency in Splunk SPL for detecting suspicious processes, binaries, and network activity.
-- Ability to correlate Sysmon events to trace attack paths and reconstruct timelines.
-- Hands-on exposure to reverse shell detection through anomalous network traffic (TCP 4444).
-- Improved understanding of parent-child process relationships in malware investigations.
-- Experience with Metasploit (msfvenom + multi/handler) for adversary emulation.
-- Application of incident investigation workflows (discovery → analysis → findings → reporting).
-- Strengthened SOC analyst skills including log analysis, threat detection, and root cause analysis.
-
-### Tools Used
-
-- Splunk Enterprise – SIEM platform for log ingestion, correlation, and detection queries.
-- Sysmon (Sysinternals) – Endpoint telemetry tool for capturing process and network events.
-- Metasploit Framework (msfvenom & multi/handler) – Payload generation and reverse shell exploitation.
-- Python HTTP Server – Used to host and deliver the malicious payload.
-- VMware Workstation – Virtualization platform for isolated attacker and victim environments.
-- Windows 10 – Endpoint target for Sysmon telemetry and reverse shell execution.
-- Kali Linux – Attacker system for reconnaissance, payload hosting, and exploitation.
-
 ## Lab Architecture
 
 ![Lab Setup](screenshots/Screenshot_2025-09-10_053151.png)
 
 *Ref 1: Network Diagram*
 
-## ⚙️ Setup & Configuration
+## Setup & Configuration
 
 ### Windows 10 VM
 - Installed **Sysmon** with modular configuration
@@ -212,25 +232,11 @@ index=endpoint {8519ae3f-07b6-68c0-ea0a-000000001500}
 
 Attack chain: `Resume.pdf.exe → cmd.exe → powershell.exe → reverse shell`
 
-## ✅ Conclusion
+## Conclusion
 
-This lab successfully demonstrated how endpoint telemetry (Sysmon) and SIEM analysis (Splunk) can be used to detect and investigate adversary activity.
+This investigation demonstrated how Splunk and Sysmon can be used to identify anomalous network activity, trace malicious process execution, and reconstruct attacker behavior from initial execution through post-exploitation activity.
 
-Detection: Suspicious network connection (TCP 4444) was identified and tied to attacker IP.
-- Investigation: Process creation events linked the activity to a malicious binary (`Resume.pdf.exe`).
-- Correlation: Parent-child process analysis and GUID correlation reconstructed the full attack chain.
-- Analysis Outcome: Confirmed reverse shell establishment and attacker reconnaissance activity.
-
-Overall, this project highlights essential SOC analyst skills, including log ingestion, anomaly detection, process correlation, and attack timeline reconstruction.
-
-## 📈 Skills Demonstrated:
-
-- Endpoint monitoring with Sysmon
-- SIEM analysis with Splunk SPL queries
-- Threat emulation with Metasploit
-- Incident investigation & reporting
-
-## 🔗 References
+## References
 
 - [Sysmon (Sysinternals)](https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon)
 - [Splunk Enterprise](https://www.splunk.com/en_us/download/splunk-enterprise.html)
